@@ -1,0 +1,73 @@
+#include<stdio.h>
+#include<math.h>
+#define N 180 //100的阶乘为一百多位的数  
+#define M 10//存放长整型数据
+int facMethod(int a[],int l)
+{
+    int i,k,L=1,j;
+	for(i=1;i<=l;i++)
+    {   
+		for(k=0;k<L;k++)
+		a[k]*=i;
+		for(j=0;j<k;j++)
+		if(a[j]>=10)
+		{if(j+1==k)
+		 k++;
+		a[j+1]+=a[j]/10;
+		a[j]%=10;}
+		L=k;
+		
+	}
+	return L;
+}
+
+			
+void main()
+{ 
+	int s[N]={1},l[M]={0},n,j,length,h,count,flag,found,tem[N];
+	long longmax=pow(2,31)-1,temp,num=0,x;
+	double z;
+	printf("该程序用于检验所输入的数的阶乘加一是素数还是偶数(仅限于长整型取值范围内成立,最大范围为12!+1,但可以给出3到100范围内数阶乘加一的具体值)\n");
+	printf("请输入一个整数(3-100):\n");
+	scanf("%d",&n);
+	length=facMethod(s,n);
+	s[0]++;if(s[0]==10)
+	{s[1]+=1;s[0]=0;}
+	printf("%d!+1为:\n",n);
+	for(j=length-1;j>=0;j--)
+	printf("%d",s[j]);
+	printf("\n");
+		for(n=0;n<length;n++)
+		tem[n]=s[n];//以tem数组代替s数组
+		temp=longmax;count=0;
+		while(temp)
+		{
+			temp/=10;
+			count++;}
+		for(h=count-1;h>=0;h--)
+		{l[h]=longmax/pow(10,h);
+		longmax-=l[h]*pow(10,h);}
+		if(length>count)	{flag=1;}
+	   else if(length==count)
+	   {   flag=0;
+		   for(h=0;h<length;h++)
+           if(tem[h]>l[h]) flag=1;
+	   }
+	   else flag=0;
+	   if(flag) printf("无法检测的数据\n");
+	   else
+	   {
+		   for(h=0;h<length;h++)
+		 num+=tem[h]*(h+1);
+		   z=sqrt(num);
+		   for(x=2;x<=z;x++)
+			   if(num%x==0)
+			   {found=0;break;}
+			   if(x>z) found=1;
+			   if(found) printf("该数为素数\n");
+			   else printf("该数为合数\n");
+	   }
+}
+
+
+		   
